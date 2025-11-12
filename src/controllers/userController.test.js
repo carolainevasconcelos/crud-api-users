@@ -1,7 +1,7 @@
 // CÓDIGO CORRETO FINAL para src/controllers/userController.test.js
 
 // Mock NO TOPO para parar o erro do banco de dados
-jest.mock('../models/userModel'); 
+jest.mock('../models/userModel'); // Deixe este minúsculo, como o nome do arquivo
 
 // Mock NO TOPO para isolar o controller
 jest.mock('../services/userService', () => ({
