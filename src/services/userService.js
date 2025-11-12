@@ -1,4 +1,4 @@
-const { getAllUsers, saveUsers } = require('../models/UserModel');
+const { getAllUsers, saveUsers } = require('../models/userModel');
 
 // Função para obter todos os usuários
 const listUsers = () => {

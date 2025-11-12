@@ -1,4 +1,4 @@
-const userModel = require('../models/UserModel');
+const userModel = require('../models/userModel');
 
 // Função para listar usuários
 const listUsers = async (req, res) => {
