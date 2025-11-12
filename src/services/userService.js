@@ -5,10 +5,14 @@ const listUsers = () => {
     return getAllUsers();
 };
 
-// Função para obter um usuário por ID
-const getUserById = (id) => {
-    const users = getAllUsers();
-    return users.find(user => user.id === id);
+// Função para obter um usuário por ID (CORRIGIDA)
+const getUserById = async (id) => {
+  try {
+    const user = await userModel.getUserById(id);
+    return user;
+  } catch (error) {
+    throw new Error('Erro ao buscar usuário por ID: ' + error.message);
+  }
 };
 
 // Função para criar um novo usuário
