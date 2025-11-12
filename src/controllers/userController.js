@@ -52,3 +52,12 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = { listUsers, getUserById, createUser, updateUser, deleteUser };
+
+// Adicione esta exportação no final do arquivo
+module.exports = {
+  getAll,
+  getById,
+  createUser,
+  updateUser,
+  deleteUser
+};

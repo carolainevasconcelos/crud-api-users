@@ -40,3 +40,12 @@ const deleteUser = (id) => {
 };
 
 module.exports = { listUsers, getUserById, createUser, updateUser, deleteUser };
+
+// Adicione esta exportação no final do arquivo
+module.exports = {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+};
