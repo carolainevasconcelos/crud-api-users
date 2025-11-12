@@ -1,13 +1,25 @@
-const { getAllUsers, saveUsers } = require('../models/userModel');
+// CÓDIGO CORRIGIDO E COMPLETO
+// src/services/userService.js
+
+// CORRIGIDO: A importação agora usa "userModel" (minúsculo) e importa o objeto inteiro
+const userModel = require('../models/userModel');
 
 // Função para obter todos os usuários
-const listUsers = () => {
-    return getAllUsers();
+const getAllUsers = async () => {
+  try {
+    // CORRIGIDO: Chama a função usando "userModel."
+    const users = await userModel.getAllUsers();
+    return users;
+  } catch (error) {
+    throw new Error('Erro ao buscar usuários: ' + error.message);
+  }
 };
 
-// Função para obter um usuário por ID (CORRIGIDA)
+// Função para obter um usuário por ID
+// CORRIGIDO: O bug de "users.find" foi totalmente reescrito
 const getUserById = async (id) => {
   try {
+    // CORRIGIDO: Chama a função usando "userModel."
     const user = await userModel.getUserById(id);
     return user;
   } catch (error) {
@@ -16,36 +28,39 @@ const getUserById = async (id) => {
 };
 
 // Função para criar um novo usuário
-const createUser = (userData) => {
-    const users = getAllUsers();
-    const newId = users.length > 0 ? Math.max(...users.map(user => user.id)) + 1 : 1;
-    const newUser = { id: newId, ...userData };
-    users.push(newUser);
-    saveUsers(users);
-    return newUser;
+const createUser = async (user) => {
+  try {
+    // CORRIGIDO: Chama a função usando "userModel."
+    const result = await userModel.createUser(user);
+    return result;
+  } catch (error) {
+    throw new Error('Erro ao criar usuário: ' + error.message);
+  }
 };
 
 // Função para atualizar um usuário
-const updateUser = (id, updatedData) => {
-    const users = getAllUsers();
-    const userIndex = users.findIndex(user => user.id === id);
-    if (userIndex === -1) throw new Error('Usuário não encontrado.');
-    users[userIndex] = { ...users[userIndex], ...updatedData };
-    saveUsers(users);
-    return users[userIndex];
+const updateUser = async (id, user) => {
+  try {
+    // CORRIGIDO: Chama a função usando "userModel."
+    const result = await userModel.updateUser(id, user);
+    return result;
+  } catch (error) {
+    throw new Error('Erro ao atualizar usuário: ' + error.message);
+  }
 };
 
 // Função para deletar um usuário
-const deleteUser = (id) => {
-    const users = getAllUsers();
-    const updatedUsers = users.filter(user => user.id !== id);
-    if (users.length === updatedUsers.length) throw new Error('Usuário não encontrado.');
-    saveUsers(updatedUsers);
+const deleteUser = async (id) => {
+  try {
+    // CORRIGIDO: Chama a função usando "userModel."
+    const result = await userModel.deleteUser(id);
+    return result;
+  } catch (error) {
+    throw new Error('Erro ao deletar usuário: ' + error.message);
+  }
 };
 
-module.exports = { listUsers, getUserById, createUser, updateUser, deleteUser };
-
-// Adicione esta exportação no final do arquivo
+// ADICIONADO: Exporta as funções para que os testes possam encontrá-las
 module.exports = {
   getAllUsers,
   getUserById,
