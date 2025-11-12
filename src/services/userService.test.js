@@ -10,7 +10,7 @@ jest.mock('../models/userModel', () => ({ // Deixe este minúsculo, como o nome 
 }));
 
 const userService = require('../services/userService');
-const userModel = require('../models/userModel');
+const userModel = require('models/userModel');
 
 // Limpa os mocks antes de cada teste
 beforeEach(() => {
