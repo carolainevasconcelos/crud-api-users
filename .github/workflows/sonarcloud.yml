@@ -34,6 +34,6 @@ jobs:
         with:
           args: >
             -Dsonar.organization=carolainevasconcelos
-            -Dsonar.projectKey=crud-api-users
+            -Dsonar.projectKey=carolainevasconcelos_crud-api-users
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.qualitygate.wait=true
