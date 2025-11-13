@@ -1,74 +1,103 @@
-// CÓDIGO CORRIGIDO E COMPLETO
-// src/controllers/userController.js
+// CÓDIGO FINAL CORRIGIDO E AMPLIADO para src/controllers/userController.test.js
 
+// Mocks para impedir o DB e isolar o controller
+jest.mock('../models/userModel'); 
+jest.mock('../services/userService', () => ({
+  getAllUsers: jest.fn(),
+  getUserById: jest.fn(),
+  createUser: jest.fn(),
+  updateUser: jest.fn(),
+  deleteUser: jest.fn(),
+}));
+
+const userController = require('../controllers/userController');
 const userService = require('../services/userService');
 
-// Função para listar usuários
-// O NOME FOI RENOMEADO DE "listUsers" PARA "getAll"
-const getAll = async (req, res) => {
-  try {
-    const users = await userService.getAllUsers();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-// Função para obter um usuário por ID
-// O NOME FOI RENOMEADO DE "getUser" PARA "getById"
-const getById = async (req, res) => {
-  try {
-    const user = await userService.getUserById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado' });
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// TESTE 1: Validação de Existência
+test('Valida a existência do método getAll', () => {
+  expect(typeof userController.getAll).toBe('function');
+});
 
-// Função para criar um novo usuário
-const createUser = async (req, res) => {
-  try {
-    const newUser = await userService.createUser(req.body);
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// TESTE 2: Validação de Existência
+test('Valida a existência do método getById', () => {
+  expect(typeof userController.getById).toBe('function');
+});
 
-// Função para atualizar um usuário
-const updateUser = async (req, res) => {
-  try {
-    const updatedUser = await userService.updateUser(req.params.id, req.body);
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'Usuário não encontrado' });
-    }
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+// TESTE 3: Fluxo de Sucesso (GET)
+test('getAll deve chamar o serviço e retornar status 200', async () => {
+  const dadosMockados = [{ id: 10, nome: 'Usuário A' }];
+  userService.getAllUsers.mockResolvedValue(dadosMockados);
 
-// Função para deletar um usuário
-const deleteUser = async (req, res) => {
-  try {
-    const result = await userService.deleteUser(req.params.id);
-    if (!result) {
-      return res.status(404).json({ message: 'Usuário não encontrado' });
-    }
-    res.status(200).json({ message: 'Usuário deletado com sucesso' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  const reqSimulada = {};
+  const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-// ADICIONADO: Exporta as funções para que os testes possam encontrá-las
-module.exports = {
-  getAll,
-  getById,
-  createUser,
-  updateUser,
-  deleteUser
-};
+  await userController.getAll(reqSimulada, resSimulada);
+
+  expect(resSimulada.status).toHaveBeenCalledWith(200);
+  expect(resSimulada.json).toHaveBeenCalledWith(dadosMockados);
+});
+
+// NOVO TESTE 4: Fluxo de Erro (GET ALL 500)
+test('getAll deve retornar status 500 em caso de falha do serviço', async () => {
+  userService.getAllUsers.mockRejectedValue(new Error('Falha no DB')); 
+
+  const reqSimulada = {};
+  const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+  await userController.getAll(reqSimulada, resSimulada);
+
+  expect(resSimulada.status).toHaveBeenCalledWith(500);
+});
+
+// NOVO TESTE 5: Fluxo de Erro (GET BY ID 404)
+test('getById deve retornar status 404 quando o usuário não é encontrado', async () => {
+  userService.getById.mockResolvedValue(null); 
+
+  const reqSimulada = { params: { id: 99 } };
+  const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+  await userController.getById(reqSimulada, resSimulada);
+
+  expect(userService.getById).toHaveBeenCalledWith('99');
+  expect(resSimulada.status).toHaveBeenCalledWith(404);
+});
+
+// NOVO TESTE 6: Criação (POST 201)
+test('createUser deve retornar status 201 após criação bem-sucedida', async () => {
+    userService.createUser.mockResolvedValue({ id: 100, name: 'Novo' });
+
+    const reqSimulada = { body: { name: 'Novo' } };
+    const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await userController.createUser(reqSimulada, resSimulada);
+
+    expect(resSimulada.status).toHaveBeenCalledWith(201);
+});
+
+// NOVO TESTE 7: Atualização (PUT 200)
+test('updateUser deve retornar status 200 após atualização', async () => {
+    userService.updateUser.mockResolvedValue({ id: 5, name: 'Atualizado' });
+
+    const reqSimulada = { params: { id: 5 }, body: { name: 'Novo' } };
+    const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await userController.updateUser(reqSimulada, resSimulada);
+
+    expect(resSimulada.status).toHaveBeenCalledWith(200);
+});
+
+// NOVO TESTE 8: Deleção (DELETE 200)
+test('deleteUser deve retornar status 200 após deletar com sucesso', async () => {
+    userService.deleteUser.mockResolvedValue(true); 
+
+    const reqSimulada = { params: { id: 5 } };
+    const resSimulada = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    await userController.deleteUser(reqSimulada, resSimulada);
+
+    expect(resSimulada.status).toHaveBeenCalledWith(200);
+});

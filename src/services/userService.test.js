@@ -1,7 +1,4 @@
-// CÓDIGO CORRETO FINAL para src/services/userService.test.js
-
-// Mock manual NO TOPO para garantir que as funções existam
-jest.mock('../models/userModel', () => ({ // Deixe este minúsculo, como o nome do arquivo
+jest.mock('../models/userModel', () => ({ 
   getAllUsers: jest.fn(),
   getUserById: jest.fn(),
   createUser: jest.fn(),
@@ -12,7 +9,7 @@ jest.mock('../models/userModel', () => ({ // Deixe este minúsculo, como o nome 
 const userService = require('../services/userService');
 const userModel = require('../models/userModel');
 
-// Limpa os mocks antes de cada teste
+
 beforeEach(() => {
   jest.clearAllMocks();
 });

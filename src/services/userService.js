@@ -1,70 +1,72 @@
-// CÓDIGO CORRIGIDO E COMPLETO
-// src/services/userService.js
+// CÓDIGO FINAL CORRIGIDO E AMPLIADO para src/services/userService.test.js
 
-// CORRIGIDO: A importação agora usa "userModel" (minúsculo) e importa o objeto inteiro
+// Mock manual para garantir que as funções existam (e impedir o DB)
+jest.mock('../models/userModel', () => ({
+  getAllUsers: jest.fn(),
+  getUserById: jest.fn(),
+  createUser: jest.fn(),
+  updateUser: jest.fn(),
+  deleteUser: jest.fn(),
+}));
+
+const userService = require('../services/userService');
 const userModel = require('../models/userModel');
 
-// Função para obter todos os usuários
-const getAllUsers = async () => {
-  try {
-    // CORRIGIDO: Chama a função usando "userModel."
-    const users = await userModel.getAllUsers();
-    return users;
-  } catch (error) {
-    throw new Error('Erro ao buscar usuários: ' + error.message);
-  }
-};
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-// Função para obter um usuário por ID
-// CORRIGIDO: O bug de "users.find" foi totalmente reescrito
-const getUserById = async (id) => {
-  try {
-    // CORRIGIDO: Chama a função usando "userModel."
-    const user = await userModel.getUserById(id);
-    return user;
-  } catch (error) {
-    throw new Error('Erro ao buscar usuário por ID: ' + error.message);
-  }
-};
+// TESTE 1: Leitura (Busca Geral)
+test('Garante que getAllUsers retorna a lista de usuários', async () => {
+  const listaDeTeste = [{ id: 1, name: 'Test User' }];
+  userModel.getAllUsers.mockResolvedValue(listaDeTeste);
 
-// Função para criar um novo usuário
-const createUser = async (user) => {
-  try {
-    // CORRIGIDO: Chama a função usando "userModel."
-    const result = await userModel.createUser(user);
-    return result;
-  } catch (error) {
-    throw new Error('Erro ao criar usuário: ' + error.message);
-  }
-};
+  const resultado = await userService.getAllUsers();
 
-// Função para atualizar um usuário
-const updateUser = async (id, user) => {
-  try {
-    // CORRIGIDO: Chama a função usando "userModel."
-    const result = await userModel.updateUser(id, user);
-    return result;
-  } catch (error) {
-    throw new Error('Erro ao atualizar usuário: ' + error.message);
-  }
-};
+  expect(resultado).toEqual(listaDeTeste);
+  expect(userModel.getAllUsers).toHaveBeenCalledTimes(1);
+});
 
-// Função para deletar um usuário
-const deleteUser = async (id) => {
-  try {
-    // CORRIGIDO: Chama a função usando "userModel."
-    const result = await userModel.deleteUser(id);
-    return result;
-  } catch (error) {
-    throw new Error('Erro ao deletar usuário: ' + error.message);
-  }
-};
+// TESTE 2: Leitura (Busca por ID)
+test('Garante que getUserById retorna um usuário específico', async () => {
+  const usuarioMockado = { id: 1, name: 'Test User' };
+  userModel.getUserById.mockResolvedValue(usuarioMockado);
 
-// ADICIONADO: Exporta as funções para que os testes possam encontrá-las
-module.exports = {
-  getAllUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser
-};
+  const resultado = await userService.getUserById(1);
+
+  expect(resultado).toEqual(usuarioMockado);
+  expect(userModel.getUserById).toHaveBeenCalledWith(1);
+});
+
+// NOVO TESTE 3: Criação (CRUD)
+test('Deve criar um novo usuário e retornar seu objeto', async () => {
+  const novosDados = { name: 'New User', email: 'a@a.com' };
+  userModel.createUser.mockResolvedValue({ id: 3, ...novosDados });
+
+  const resultado = await userService.createUser(novosDados);
+
+  expect(resultado.id).toBeDefined();
+  expect(resultado.name).toBe('New User');
+  expect(userModel.createUser).toHaveBeenCalledWith(novosDados);
+});
+
+// NOVO TESTE 4: Atualização (CRUD)
+test('Deve atualizar um usuário existente e retornar sucesso', async () => {
+  const updates = { name: 'Updated Name' };
+  userModel.updateUser.mockResolvedValue(true); 
+
+  const resultado = await userService.updateUser(1, updates);
+
+  expect(resultado).toBe(true);
+  expect(userModel.updateUser).toHaveBeenCalledWith(1, updates);
+});
+
+// NOVO TESTE 5: Deleção (CRUD)
+test('Deve deletar um usuário existente e retornar sucesso', async () => {
+  userModel.deleteUser.mockResolvedValue(true); 
+  
+  const resultado = await userService.deleteUser(1);
+
+  expect(resultado).toBe(true);
+  expect(userModel.deleteUser).toHaveBeenCalledWith(1);
+});

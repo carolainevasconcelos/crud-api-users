@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1762993568851" clover="3.2.0">
+  <project timestamp="1762993568851" name="All files">
+    <metrics statements="35" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7" elements="42" coveredelements="31" complexity="0" loc="35" ncloc="35" packages="1" files="1" classes="1"/>
+    <file name="userService.js" path="C:\Users\vasco\OneDrive\Área de Trabalho\a\crud-api-users\src\services\userService.js">
+      <metrics statements="35" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="15" count="1" type="stmt"/>
+      <line num="16" count="7" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="26" count="0" type="stmt"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="31" count="1" type="stmt"/>
+      <line num="32" count="1" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="35" count="1" type="stmt"/>
+      <line num="37" count="0" type="stmt"/>
+      <line num="38" count="0" type="stmt"/>
+      <line num="42" count="1" type="stmt"/>
+      <line num="43" count="1" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="46" count="1" type="stmt"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="49" count="0" type="stmt"/>
+      <line num="50" count="0" type="stmt"/>
+      <line num="54" count="1" type="stmt"/>
+      <line num="55" count="1" type="stmt"/>
+      <line num="56" count="1" type="stmt"/>
+      <line num="58" count="1" type="stmt"/>
+      <line num="60" count="0" type="stmt"/>
+      <line num="61" count="0" type="stmt"/>
+      <line num="65" count="1" type="stmt"/>
+      <line num="66" count="1" type="stmt"/>
+      <line num="68" count="1" type="stmt"/>
+      <line num="70" count="0" type="stmt"/>
+      <line num="71" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>
